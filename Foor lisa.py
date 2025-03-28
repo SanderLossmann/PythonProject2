@@ -1,7 +1,7 @@
 import pygame
 pygame.init()
 
-screen=pygame.display.set_mode([300, 300])
+screen=pygame.display.set_mode([300, 600])
 pygame.display.set_caption("Foor - Sander Lossmann")
 
 #värvid
@@ -24,5 +24,12 @@ while running:
     pygame.draw.circle(screen, Punane, [100, 100], 35, 35)
     pygame.draw.circle(screen, Kollane, [100, 175], 35, 35)
     pygame.draw.circle(screen, Roheline, [100, 250], 35, 35)
+    pygame.draw.rect(screen, Hall, [90, 295, 25, 250], 2)
+
+    tipud = [(320, 150), (270, 250), (370, 250)]
+
+    # Joonista kolmnurk
+    pygame.draw.polygon(screen, Hall, tipud)
+
 
     pygame.display.flip()

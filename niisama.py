@@ -1,69 +1,120 @@
 import pygame
-import random
 pygame.init()
 
-# värvid
-Roheline = (153, 204, 0)
-Valge = (255, 255, 255)
-Must = (0, 0, 0)
+IGreen = [153, 255, 153]
 
-# ekraani seaded
-screenX = 640
-screenY = 480
-screen = pygame.display.set_mode([screenX, screenY])
-pygame.display.set_caption("ruudu pela")
-screen.fill(Valge)
+screen = pygame.display.set_mode([640, 480])
+pygame.display.set_caption("Ralliauto mäng")
+screen.fill(IGreen)
 clock = pygame.time.Clock()
 
+Rally = pygame.image.load("img/bg_rally.jpg")
+Rally = pygame.transform.scale(Rally, [640, 480])
 
-# koordinaadid ja kiirus
-posX, posY = screenX / 2, screenY / 2
-speedX, speedY = 0, 0
-directionX, directionY = 0, 0
+punane_auto = pygame.image.load("img/f1_red.png")
+sinine_auto = pygame.image.load("img/f1_blue.png")
 
+# Pöörame sinised autod 180 kraadi
+sinine_auto = pygame.transform.rotate(sinine_auto, 180)
+
+PosX, PosY = 420, 100
+posX, posY = 180, 200
+posx, posy = 300, 0
+
+speed = 7
+Speed = 8
+SPEED = 6
+speedX = 0
+punase_auto_posX = 300
 
 gameover = False
-while not gameover:
+score = 0  # Algne skoor
+
+def check_collision(punane_rect, sinine_rects):
+    for sinine_rect in sinine_rects:
+        if punane_rect.colliderect(sinine_rect):
+            return True
+    return False
+
+while True:
     clock.tick(60)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            gameover = True
+            pygame.quit()
+            exit()
 
-        # klahvivajutus
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
-                directionX = "move_right"
+                speedX = 3
             elif event.key == pygame.K_LEFT:
-                directionX = "move_left"
-            elif event.key == pygame.K_UP:
-                directionY = "move_up"
-            elif event.key == pygame.K_DOWN:
-                directionY = "move_down"
+                speedX = -3
+            elif event.key == pygame.K_RETURN and gameover:
+                # Kui mäng on läbi, alusta uuesti
+                punase_auto_posX = 300
+                PosY = 200
+                posY = 0
+                posy = 0
+                speedX = 0
+                gameover = False
+                score = 0  # Alusta skoor nullist
+            elif event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                exit()  # Kui ESC on vajutatud, siis väljub mängust
 
-        # klahvivajutuse vabastamine
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
-                directionX = 0
-            if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-                directionY = 0
+                speedX = 0
 
-    # mängu piirjoonte tuvastamine
-    if directionX == "move_left":
-        if posX > 0:
-            posX -= 3
-    elif directionX == "move_right":
-        if posX + 30 < screenX:
-            posX += 3
-    if directionY == "move_up":
-        if posY > 0:
-            posY -= 3
-    elif directionY == "move_down":
-        if posY + 30 < screenY:
-            posY += 3
+    if not gameover:
+        punase_auto_posX += speedX
 
+        if punase_auto_posX < 140:
+            punase_auto_posX = 140
+        if punase_auto_posX > 500 - punane_auto.get_width():
+            punase_auto_posX = 500 - punane_auto.get_width()
 
-    ruut = pygame.draw.rect(screen, Roheline, [posX, posY, 30, 30])
+        posY += Speed
+        PosY += speed
+        posy += SPEED
+
+        # Kui sinine auto jõuab ekraani alla, suurenda skoori
+        if PosY > 480:
+            PosY = -sinine_auto.get_height()
+            score += 1  # Skoori suurendamine
+
+        if posY > 480:
+            posY = -sinine_auto.get_height()
+            score += 1  # Skoori suurendamine
+
+        if posy > 480:
+            posy = -sinine_auto.get_height()
+            score += 1  # Skoori suurendamine
+
+        punase_auto_rect = pygame.Rect(punase_auto_posX, 390, punane_auto.get_width(), punane_auto.get_height())
+        sinised_autod_rects = [
+            pygame.Rect(PosX, PosY, sinine_auto.get_width(), sinine_auto.get_height()),
+            pygame.Rect(posX, posY, sinine_auto.get_width(), sinine_auto.get_height()),
+            pygame.Rect(posx, posy, sinine_auto.get_width(), sinine_auto.get_height())
+        ]
+
+        if check_collision(punase_auto_rect, sinised_autod_rects):
+            gameover = True
+
+    screen.blit(Rally, [0, 0])
+    screen.blit(punane_auto, (punase_auto_posX, 390))
+    screen.blit(sinine_auto, (PosX, PosY))
+    screen.blit(sinine_auto, (posX, posY))
+    screen.blit(sinine_auto, (posx, posy))
+
+    # Kuvame skoori
+    font = pygame.font.SysFont(None, 25)
+    score_text = font.render(f"Skoor: {score}", True, (0, 0, 0))
+    screen.blit(score_text, (10, 10))
+
+    if gameover:
+        # Kui mäng on läbi, kuvame skoori
+        game_over_text = font.render(f"Mäng Läbi! Skoor: {score}. Uuesti alustamiseks ENTER. Väljumiseks ESC.", True, (0, 0, 0))
+        screen.blit(game_over_text, (50, 200))
+
     pygame.display.flip()
-    screen.fill(Valge)
-pygame.quit()
