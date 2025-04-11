@@ -10,6 +10,8 @@ Kollane = (255, 255, 0)
 Roheline = (0, 255, 0)
 Must = (0, 0, 0)
 Hall = (128, 128, 128)
+Sinine = (0, 0, 255)
+Valge = (255, 255, 255)
 
 running = True
 while running:
@@ -25,11 +27,13 @@ while running:
     pygame.draw.circle(screen, Kollane, [100, 175], 35, 35)
     pygame.draw.circle(screen, Roheline, [100, 250], 35, 35)
     pygame.draw.rect(screen, Hall, [90, 295, 25, 250], 2)
-
-    tipud = [(320, 150), (270, 250), (370, 250)]
-
-    # Joonista kolmnurk
-    pygame.draw.polygon(screen, Hall, tipud)
+    pygame.draw.line(screen, Hall, [80,545], [125,545], 2)
+    pygame.draw.line(screen, Hall, [125,545], [140, 580], 2)
+    pygame.draw.line(screen, Hall, [140, 580], [65, 580], 2)
+    pygame.draw.line(screen, Hall, [65, 580], [80, 545], 2)
+    pygame.draw.rect(screen, Sinine, [85, 548, 37,10], 5)
+    pygame.draw.rect(screen, Hall, [85, 558, 37,10], 1)
+    pygame.draw.rect(screen, Valge, [85, 568, 37, 10], 5)
 
 
     pygame.display.flip()

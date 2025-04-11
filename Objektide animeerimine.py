@@ -14,21 +14,21 @@ Rally = pygame.transform.scale(Rally, [640, 480])
 punane_auto = pygame.image.load("img/f1_red.png")
 sinine_auto = pygame.image.load("img/f1_blue.png")
 
-# Pöörame sinised autod 180 kraadi
+
 sinine_auto = pygame.transform.rotate(sinine_auto, 180)
 
 PosX, PosY = 420, 100
 posX, posY = 180, 200
 posx, posy = 300, 0
 
-speed = 7
-Speed = 8
-SPEED = 6
+speed = 6
+Speed = 7
+SPEED = 5
 speedX = 0
 punase_auto_posX = 300
 
 gameover = False
-score = 0  # Algne skoor
+score = 0
 
 def check_collision(punane_rect, sinine_rects):
     for sinine_rect in sinine_rects:
@@ -57,10 +57,10 @@ while True:
                 posy = 0
                 speedX = 0
                 gameover = False
-                score = 0  # Alusta skoor nullist
+                score = 0
             elif event.key == pygame.K_ESCAPE:
                 pygame.quit()
-                exit()  # Kui ESC on vajutatud, siis väljub mängust
+                exit()
 
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
@@ -78,18 +78,18 @@ while True:
         PosY += speed
         posy += SPEED
 
-        # Kui sinine auto jõuab ekraani alla, suurenda skoori
+
         if PosY > 480:
             PosY = -sinine_auto.get_height()
-            score += 1  # Skoori suurendamine
+            score += 1
 
         if posY > 480:
             posY = -sinine_auto.get_height()
-            score += 1  # Skoori suurendamine
+            score += 1
 
         if posy > 480:
             posy = -sinine_auto.get_height()
-            score += 1  # Skoori suurendamine
+            score += 1
 
         punase_auto_rect = pygame.Rect(punase_auto_posX, 390, punane_auto.get_width(), punane_auto.get_height())
         sinised_autod_rects = [
