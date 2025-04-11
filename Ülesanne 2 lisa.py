@@ -19,10 +19,11 @@ start_angle = -angle_between * len(text1) / 4
 bg = pygame.image.load("img/bg_shop.jpg")
 screen.blit(bg,[0,0])
 muua = pygame.image.load("img/seller.png")
-muua = pygame.transform.scale(muua, [250, 300])
-screen.blit(muua,[100,170])
+muua = pygame.transform.scale(muua, [250, 305])
+screen.blit(muua,[105,160])
 chat = pygame.image.load("img/chat.png")
-screen.blit(chat, [250,40])
+chat = pygame.transform.scale(chat, [250,210])
+screen.blit(chat, [250,65])
 VIKK = pygame.image.load("img/VIKK logo.png")
 screen.blit(VIKK, [10,10])
 Mook = pygame.image.load("img/Mõõk.png")
@@ -33,9 +34,9 @@ tort = pygame.transform.scale(tort, [140, 140])
 screen.blit(tort, [260, 170])
 
 
-font = pygame.font.Font(None, 27)
+font = pygame.font.Font(None, 25)
 text = font.render("Tere, minu nimi on Sander", True, [255, 255, 255])
-screen.blit(text, [280,140])
+screen.blit(text, [265,150])
 
 gameover = False
 while not gameover:
